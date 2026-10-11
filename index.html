@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restaurant Menu Template — Free & Open Source | Nukhba Studio</title>
+<meta name="description" content="A free, open-source, single-file digital menu with cart and WhatsApp ordering. Fully customizable. Built by Nukhba Studio.">
+<meta property="og:title" content="Free Open-Source Restaurant Menu Template">
+<meta property="og:description" content="Single-file digital menu with cart and WhatsApp ordering. Fork it and make it yours.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--bg:#0b0f14;--card:#121821;--line:#1e2836;--gold:#e0a94b;--gold2:#f3c677;--text:#eef3f9;--muted:#93a3b6;--acc:#41d67a}
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;padding-bottom:96px}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+  header{text-align:center;padding:64px 0 36px;position:relative;overflow:hidden}
+  header::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 340px at 50% -10%,rgba(224,169,75,.18),transparent 70%)}
+  h1{font-size:clamp(28px,6vw,48px);font-weight:900;position:relative}
+  h1 span{color:var(--gold)}
+  header p{color:var(--muted);max-width:520px;margin:14px auto 0;position:relative}
+  .cats{position:sticky;top:0;z-index:20;background:rgba(11,15,20,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .cats .wrap{display:flex;gap:10px;overflow-x:auto;padding:14px 20px}
+  .cat{white-space:nowrap;padding:9px 20px;border-radius:99px;border:1px solid var(--line);background:var(--card);color:var(--muted);cursor:pointer;font-size:15px;font-family:inherit}
+  .cat.on{background:var(--gold);border-color:var(--gold);color:#171006;font-weight:800}
+  main{max-width:1000px;margin:0 auto;padding:30px 20px}
+  .sec-title{font-size:21px;font-weight:800;margin:24px 0 14px}
+  .items{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(290px,1fr))}
+  .item{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px}
+  .item .row{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+  .item h3{font-size:17px}
+  .item .desc{color:var(--muted);font-size:13.5px;margin-top:3px}
+  .item .price{color:var(--gold2);font-weight:900;white-space:nowrap}
+  .add{margin-top:auto;padding:11px;border-radius:11px;border:1px solid var(--line);background:transparent;color:var(--text);cursor:pointer;font-family:inherit;font-weight:700;font-size:14.5px}
+  .add:hover{border-color:var(--gold);color:var(--gold2)}
+  .cartbar{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);padding:14px 20px;z-index:40}
+  .cartbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:14px}
+  .checkout{padding:13px 30px;border-radius:12px;background:var(--acc);color:#04120a;border:0;font-family:inherit;font-weight:900;cursor:pointer}
+  .checkout:disabled{opacity:.4}
+  footer{text-align:center;color:var(--muted);font-size:13.5px;padding:40px 20px 10px}
+  footer a{color:var(--gold2);text-decoration:none}
+</style>
+</head>
+<body>
+
+<!-- =========================================================
+     HOW TO CUSTOMIZE (no coding needed):
+     1) Edit the CONFIG object below  (name, phone, currency, language).
+     2) Edit the DATA array with your categories and items.
+     3) Host this single file anywhere (Netlify, GitHub Pages, Vercel...).
+     Built by Nukhba Studio — need a custom version? See the footer.
+     ========================================================= -->
+<script>
+const CONFIG = {
+  restaurant: "Your Restaurant Name",
+  tagline: "Fresh food, made with love",
+  whatsapp: "1234567890",     // full international number, digits only
+  currency: "$",
+  language: "en"              // "en" or "ar"
+};
+
+const DATA = [
+  { id:"main", name:"Main Dishes", items:[
+    { name:"Grilled Chicken", desc:"Marinated chicken, house spices", price:12 },
+    { name:"Beef Burger", desc:"Angus beef, cheddar, fries", price:10 },
+    { name:"Pasta Alfredo", desc:"Creamy sauce, parmesan", price:11 }
+  ]},
+  { id:"sides", name:"Sides", items:[
+    { name:"French Fries", desc:"Crispy, sea salt", price:3 },
+    { name:"Caesar Salad", desc:"Romaine, croutons, dressing", price:5 }
+  ]},
+  { id:"drinks", name:"Drinks", items:[
+    { name:"Fresh Orange Juice", desc:"100% natural", price:4 },
+    { name:"Coffee", desc:"Espresso / Americano", price:3 }
+  ]}
+];
+</script>
+
+<header>
+  <div class="wrap">
+    <h1 id="title"></h1>
+    <p id="tagline"></p>
+  </div>
+</header>
+
+<div class="cats"><div class="wrap" id="cats"></div></div>
+<main id="menu"></main>
+
+<div class="cartbar">
+  <div class="wrap">
+    <div>🛒 <span id="count">0</span> — <b id="total">0</b> <span id="cur"></span></div>
+    <button class="checkout" id="checkout" disabled>Order via WhatsApp</button>
+  </div>
+</div>
+
+<footer>
+  Template by <a href="https://younisgaith1-ctrl.github.io/nukhba-site/en.html" target="_blank" rel="noopener">Nukhba Studio</a> · Need a custom menu for your restaurant? <a href="https://younisgaith1-ctrl.github.io/nukhba-site/en.html">Get in touch</a>.
+</footer>
+
+<script>
+const fmt = (n) => n.toLocaleString('en-US');
+document.getElementById('title').innerHTML = CONFIG.restaurant + ' <span>' + (CONFIG.language==='ar'?'المنيو':'Menu') + '</span>';
+document.getElementById('tagline').textContent = CONFIG.tagline;
+document.getElementById('cur').textContent = CONFIG.currency;
+document.title = CONFIG.restaurant + ' — Menu';
+const cart = {}; let activeCat = 'all';
+const catsEl = document.getElementById('cats'), menuEl = document.getElementById('menu');
+const countEl = document.getElementById('count'), totalEl = document.getElementById('total');
+function renderCats(){
+  const cats=[{id:'all',name:'All'},...DATA.map(s=>({id:s.id,name:s.name}))];
+  catsEl.innerHTML=cats.map(c=>`<button class="cat ${c.id===activeCat?'on':''}" data-id="${c.id}">${c.name}</button>`).join('');
+}
+function renderMenu(){
+  const secs = activeCat==='all'?DATA:DATA.filter(s=>s.id===activeCat);
+  menuEl.innerHTML=secs.map(s=>`<div class="sec-title">${s.name}</div><div class="items">${s.items.map(it=>`
+    <div class="item"><div class="row"><div><h3>${it.name}</h3><div class="desc">${it.desc||''}</div></div>
+    <div class="price">${CONFIG.currency}${it.price}</div></div>
+    <button class="add" data-name="${it.name}" data-price="${it.price}">Add to cart +</button></div>`).join('')}</div>`).join('');
+}
+function update(){
+  let c=0,t=0; for(const k in cart){c+=cart[k].qty;t+=cart[k].qty*cart[k].price;}
+  countEl.textContent=c; totalEl.textContent=fmt(t); document.getElementById('checkout').disabled=c===0;
+}
+document.addEventListener('click',(e)=>{
+  const cat=e.target.closest('.cat');
+  if(cat){activeCat=cat.dataset.id;renderCats();renderMenu();return;}
+  const add=e.target.closest('.add');
+  if(add){const n=add.dataset.name,p=+add.dataset.price;cart[n]=cart[n]||{price:p,qty:0};cart[n].qty++;update();add.textContent='In cart ✓';}
+});
+document.getElementById('checkout').addEventListener('click',()=>{
+  let lines=[],t=0,c=0;
+  for(const k in cart){lines.push(`• ${k} x${cart[k].qty} = ${CONFIG.currency}${fmt(cart[k].qty*cart[k].price)}`);t+=cart[k].qty*cart[k].price;c+=cart[k].qty;}
+  const msg=`Hello, I'd like to order:\n\n${lines.join('\n')}\n\nItems: ${c}\nTotal: ${CONFIG.currency}${fmt(t)}`;
+  window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`,'_blank');
+});
+renderCats();renderMenu();update();
+</script>
+</body>
+</html>
