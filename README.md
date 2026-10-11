@@ -39,6 +39,10 @@ const CONFIG = {
 Open `index.html` in a browser, or see it hosted:
 `https://younisgaith1-ctrl.github.io/restaurant-menu-template/`
 
+## 🔗 More free tools
+
+- 📅 [Appointment Booking Template](https://github.com/younisgaith1-ctrl/booking-template) — single-file booking with WhatsApp confirmation (clinics, salons, consultants).
+
 ## 🤝 Want a custom version?
 
 This template is intentionally simple. If you want it tailored to your brand — your photos, your categories, multi-language, online payments, delivery zones, a small admin dashboard, or integration with your POS — **Nukhba Studio** can build it for you.
